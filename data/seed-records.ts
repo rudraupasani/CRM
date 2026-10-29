@@ -1,0 +1,48 @@
+import type { RecordItem } from '@/types/crm'
+
+export const seedRecords: RecordItem[] = [
+  {
+    id: '1',
+    name: 'Olivia Martin',
+    company: 'Acme Inc.',
+    status: 'Qualified',
+    value: '$24,500',
+    owner: 'Alex Rivera',
+    email: 'olivia@acme.test',
+    phone: '+1 555-0192',
+    createdAt: '2024-10-14T10:00:00.000Z',
+  },
+  {
+    id: '2',
+    name: 'Jackson Kim',
+    company: 'Globex Corporation',
+    status: 'Proposal',
+    value: '$18,200',
+    owner: 'Sales team',
+    email: 'jackson@globex.test',
+    phone: '+1 555-0188',
+    createdAt: '2024-10-13T14:30:00.000Z',
+  },
+  {
+    id: '3',
+    name: 'Sophia Williams',
+    company: 'Vertex Labs',
+    status: 'New lead',
+    value: '$12,800',
+    owner: 'Sales team',
+    email: 'sophia@vertex.test',
+    phone: '+1 555-0143',
+    createdAt: '2024-10-12T09:15:00.000Z',
+  },
+  {
+    id: '4',
+    name: 'Ethan Thomas',
+    company: 'Horizon Systems',
+    status: 'Negotiation',
+    value: '$31,600',
+    owner: 'Sales team',
+    email: 'ethan@horizon.test',
+    phone: '+1 555-0177',
+    createdAt: '2024-10-10T16:45:00.000Z',
+  },
+]
