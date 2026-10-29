@@ -16,6 +16,8 @@ body {
     margin: 0;
     background: #f7f8fb;
     color: #182230;
+    height: 100vh;
+    overflow: hidden;
 }
 
 button,
@@ -28,21 +30,30 @@ button {
 }
 
 .crm-shell {
-    min-height: 100vh;
+    height: 100vh;
+    max-height: 100vh;
     display: flex;
     background: #f7f8fb;
+    overflow: hidden;
 }
 
 .sidebar {
     width: 244px;
     flex: 0 0 244px;
-    min-height: 100vh;
+    height: 100vh;
+    max-height: 100vh;
     background: #fff;
     border-right: 1px solid #e8ebf0;
     display: flex;
     flex-direction: column;
     padding: 22px 14px 16px;
     transition: width .2s ease, flex-basis .2s ease;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 10;
 }
 
 .sidebar-collapsed {
@@ -219,16 +230,26 @@ button {
 .main-content {
     flex: 1;
     min-width: 0;
+    height: 100vh;
+    max-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .topbar {
     height: 70px;
+    flex: 0 0 70px;
     padding: 0 34px;
     border-bottom: 1px solid #e8ebf0;
-    background: rgba(255, 255, 255, .78);
+    background: rgba(255, 255, 255, .88);
+    backdrop-filter: blur(8px);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 9;
 }
 
 .breadcrumb {
@@ -305,9 +326,13 @@ button {
 }
 
 .page-body {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
     padding: 30px 34px 40px;
     max-width: 1500px;
-    margin: auto;
+    width: 100%;
+    margin: 0 auto;
 }
 
 .page-heading {
