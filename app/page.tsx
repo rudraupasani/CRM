@@ -9,6 +9,7 @@ import { DashboardView } from '@/components/dashboard/dashboard-view'
 import { RecordsPage } from '@/components/records/records-page'
 import { InvoicePage } from '@/components/invoices/invoice-page'
 import { SettingsPage } from '@/components/settings/settings-page'
+import { LeadSourcesView } from '@/components/integrations/lead-sources-view'
 import { CreateRecordModal } from '@/components/records/create-record-modal'
 import { RecordDetailModal } from '@/components/records/record-detail-modal'
 import { EditRecordModal } from '@/components/records/edit-record-modal'
@@ -21,7 +22,7 @@ export default function Page() {
   const [selectedRecord, setSelectedRecord] = useState<RecordItem | null>(null)
   const [editingRecord, setEditingRecord] = useState<RecordItem | null>(null)
 
-  const { records, addRecord, updateRecord, deleteRecord } = useCrmRecords()
+  const { records, addRecord, addRecords, updateRecord, deleteRecord } = useCrmRecords()
 
   const handleCreate = (type: string) => {
     setModalType(type)
@@ -50,21 +51,23 @@ export default function Page() {
   const getSectionDescription = (section: CRMSection) => {
     switch (section) {
       case 'Leads':
-        return 'Capture, qualify, and convert your best opportunities.'
+        return 'Capture, qualify, and convert your best opportunities from Meta Ads, Google Sheets & Webhooks.'
+      case 'Lead Sources':
+        return 'Connect marketing channels, Google Sheets, Meta Ads, and webhooks.'
       case 'Deals':
-        return 'Track active sales negotiations, stage velocity, and expected revenue.'
+        return 'Track active IT software negotiations, client scope review, and expected revenue.'
       case 'Contacts':
         return 'Maintain relationships and communication history with decision makers.'
       case 'Companies':
-        return 'Account directory and corporate hierarchy overview.'
+        return 'Corporate accounts and client organization directory.'
       case 'Tasks':
-        return 'Actionable follow-ups and priority items across team members.'
+        return 'Engineering follow-ups and priority items across team members.'
       case 'Quotations':
-        return 'Formal pricing estimates and customer proposals.'
+        return 'Software scope estimates and official project proposals.'
       case 'Support':
-        return 'Customer requests, tickets, and resolution timelines.'
+        return 'Customer requests, tickets, and bug resolution timelines.'
       case 'Reports':
-        return 'Pipeline analytics, performance metrics, and revenue forecasts.'
+        return 'Pipeline analytics, deal source attribution, and revenue forecasts.'
       case 'Settings':
         return 'Configure your organization profile, email sender, data export, and preferences.'
       default:
@@ -74,7 +77,17 @@ export default function Page() {
 
   const renderContent = () => {
     if (active === 'Overview') {
-      return <DashboardView onCreate={() => handleCreate('Leads')} />
+      return (
+        <DashboardView
+          onCreate={() => handleCreate('Leads')}
+          records={records}
+          onNavigate={(sec) => setActive(sec)}
+        />
+      )
+    }
+
+    if (active === 'Lead Sources') {
+      return <LeadSourcesView records={records} onAddLeads={addRecords} />
     }
 
     if (active === 'Invoices') {

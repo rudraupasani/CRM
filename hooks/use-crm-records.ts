@@ -42,6 +42,10 @@ export function useCrmRecords() {
     setRecords((prev) => [newRecord, ...prev])
   }, [])
 
+  const addRecords = useCallback((newRecords: RecordItem[]) => {
+    setRecords((prev) => [...newRecords, ...prev])
+  }, [])
+
   const updateRecord = useCallback((updated: RecordItem) => {
     setRecords((prev) => prev.map((item) => (item.id === updated.id ? updated : item)))
   }, [])
@@ -53,6 +57,7 @@ export function useCrmRecords() {
   return {
     records,
     addRecord,
+    addRecords,
     updateRecord,
     deleteRecord,
     isLoaded,

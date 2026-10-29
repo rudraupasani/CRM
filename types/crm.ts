@@ -1,12 +1,28 @@
 export type RecordStatus =
   | 'New lead'
+  | 'Discovery'
   | 'Qualified'
   | 'Proposal'
   | 'Negotiation'
+  | 'In Development'
   | 'Active'
   | 'Open'
+  | 'Won / Closed'
+  | 'Lost'
   | 'Complete'
   | string
+
+export type LeadSource =
+  | 'Google Sheets'
+  | 'Meta Ads'
+  | 'Website Form'
+  | 'LinkedIn Ads'
+  | 'Inbound Call'
+  | 'Custom Webhook'
+  | 'Direct / Manual'
+  | string
+
+export type LeadQuality = 'Hot' | 'Warm' | 'Cold'
 
 export interface RecordItem {
   id: string
@@ -19,11 +35,18 @@ export interface RecordItem {
   phone?: string
   due?: string
   createdAt?: string
+  source?: LeadSource
+  serviceType?: string
+  leadQuality?: LeadQuality
+  notes?: string
+  campaign?: string
+  currency?: 'INR' | 'USD'
 }
 
 export type CRMSection =
   | 'Overview'
   | 'Leads'
+  | 'Lead Sources'
   | 'Contacts'
   | 'Companies'
   | 'Deals'

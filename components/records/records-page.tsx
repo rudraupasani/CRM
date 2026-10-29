@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Plus, Filter, CalendarDays, Download, ChevronRight, Pencil, FileSpreadsheet, Mail, CheckCircle2, AlertCircle } from 'lucide-react'
+import { Plus, Filter, CalendarDays, Download, ChevronRight, Pencil, FileSpreadsheet, Mail, CheckCircle2, AlertCircle, Share2 } from 'lucide-react'
 import type { RecordItem } from '@/types/crm'
 import { exportExcel } from '@/lib/export'
 import { getInitials } from '@/lib/formatters'
@@ -32,17 +32,19 @@ export function RecordsPage({
   const now = new Date()
   const [month, setMonth] = useState('all')
   const [year, setYear] = useState('all')
+  const [sourceFilter, setSourceFilter] = useState('all')
   const [syncingSheets, setSyncingSheets] = useState(false)
   const [sheetsMessage, setSheetsMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
   const visible = records.filter((r) => {
-    const matchesSearch = `${r.name} ${r.company} ${r.email || ''}`
+    const matchesSearch = `${r.name} ${r.company} ${r.email || ''} ${r.source || ''} ${r.serviceType || ''}`
       .toLowerCase()
       .includes(search.toLowerCase())
     const date = new Date(r.createdAt || now.toISOString())
     const matchesMonth = month === 'all' || String(date.getMonth() + 1) === month
     const matchesYear = year === 'all' || String(date.getFullYear()) === year
-    return matchesSearch && matchesMonth && matchesYear
+    const matchesSource = sourceFilter === 'all' || (r.source && r.source.toLowerCase().includes(sourceFilter.toLowerCase()))
+    return matchesSearch && matchesMonth && matchesYear && matchesSource
   })
 
   const downloadData = () => {
@@ -53,6 +55,9 @@ export function RecordsPage({
         name: r.name,
         company: r.company,
         email: r.email || '',
+        phone: r.phone || '',
+        source: r.source || 'Direct',
+        service_required: r.serviceType || '',
         status: r.status,
         value: r.value,
         owner: r.owner,
@@ -73,10 +78,12 @@ export function RecordsPage({
           Name: r.name,
           Company: r.company,
           Email: r.email || '',
+          Phone: r.phone || '',
+          Source: r.source || 'Direct',
+          Service_Requirement: r.serviceType || '',
           Status: r.status,
           Value: r.value,
           Owner: r.owner,
-          Phone: r.phone || '',
           Created_At: r.createdAt || '',
         }))
       )
@@ -137,6 +144,24 @@ export function RecordsPage({
             <p>{visible.length} records in this workspace</p>
           </div>
           <div className="table-actions">
+            {type === 'Leads' && (
+              <label className="filter-control">
+                <Share2 size={14} /> Channel
+                <select
+                  aria-label="Filter by lead channel source"
+                  value={sourceFilter}
+                  onChange={(e) => setSourceFilter(e.target.value)}
+                >
+                  <option value="all">All Sources</option>
+                  <option value="meta">Meta Ads</option>
+                  <option value="sheets">Google Sheets</option>
+                  <option value="website">Website Form</option>
+                  <option value="webhook">Webhook / Zapier</option>
+                  <option value="direct">Direct / Manual</option>
+                </select>
+              </label>
+            )}
+
             <label className="filter-control">
               <Filter size={14} /> Month
               <select
@@ -147,7 +172,7 @@ export function RecordsPage({
                 <option value="all">All months</option>
                 {Array.from({ length: 12 }, (_, index) => (
                   <option key={index + 1} value={String(index + 1)}>
-                    {new Date(2024, index, 1).toLocaleString('default', {
+                    {new Date(2026, index, 1).toLocaleString('default', {
                       month: 'long',
                     })}
                   </option>
@@ -190,10 +215,12 @@ export function RecordsPage({
           <table>
             <thead>
               <tr>
-                <th>Name</th>
+                <th>Lead / Client</th>
                 <th>Company</th>
+                {type === 'Leads' && <th>Source</th>}
+                {type === 'Leads' && <th>Service Required</th>}
                 <th>Status</th>
-                <th>Value</th>
+                <th>Deal Value</th>
                 <th>Owner</th>
                 <th style={{ textAlign: 'right' }}>Actions</th>
               </tr>
@@ -210,14 +237,56 @@ export function RecordsPage({
                       <span className="activity-avatar bg-violet-100 text-violet-700">
                         {getInitials(record.name)}
                       </span>
-                      <strong>{record.name}</strong>
+                      <div>
+                        <strong>{record.name}</strong>
+                        {record.email && (
+                          <div style={{ fontSize: '11px', color: '#64748b' }}>{record.email}</div>
+                        )}
+                      </div>
                     </div>
                   </td>
                   <td>{record.company}</td>
+                  {type === 'Leads' && (
+                    <td>
+                      <span
+                        style={{
+                          padding: '3px 8px',
+                          borderRadius: '999px',
+                          fontSize: '11px',
+                          fontWeight: 600,
+                          background:
+                            record.source === 'Meta Ads'
+                              ? '#e0e7ff'
+                              : record.source === 'Google Sheets'
+                                ? '#dcfce7'
+                                : record.source === 'Website Form'
+                                  ? '#f3e8ff'
+                                  : '#f1f5f9',
+                          color:
+                            record.source === 'Meta Ads'
+                              ? '#3730a3'
+                              : record.source === 'Google Sheets'
+                                ? '#166534'
+                                : record.source === 'Website Form'
+                                  ? '#6b21a8'
+                                  : '#334155',
+                        }}
+                      >
+                        {record.source || 'Direct'}
+                      </span>
+                    </td>
+                  )}
+                  {type === 'Leads' && (
+                    <td style={{ fontSize: '12px', color: '#334155', maxWidth: '200px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      {record.serviceType || 'Custom Software'}
+                    </td>
+                  )}
                   <td>
                     <span className="status-pill">{record.status}</span>
                   </td>
-                  <td>{record.value || '—'}</td>
+                  <td>
+                    <strong style={{ color: '#0f172a' }}>{record.value || '—'}</strong>
+                  </td>
                   <td>{record.owner}</td>
                   <td>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '6px' }}>
@@ -264,7 +333,7 @@ export function RecordsPage({
               ))}
               {visible.length === 0 && (
                 <tr>
-                  <td colSpan={6} style={{ textAlign: 'center', padding: '36px 20px', color: '#9aa3b1' }}>
+                  <td colSpan={type === 'Leads' ? 8 : 6} style={{ textAlign: 'center', padding: '36px 20px', color: '#9aa3b1' }}>
                     No records found matching your filters.
                   </td>
                 </tr>
