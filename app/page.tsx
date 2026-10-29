@@ -10,6 +10,8 @@ import { RecordsPage } from '@/components/records/records-page'
 import { InvoicePage } from '@/components/invoices/invoice-page'
 import { SettingsPage } from '@/components/settings/settings-page'
 import { LeadSourcesView } from '@/components/integrations/lead-sources-view'
+import { QuotationsView } from '@/components/quotations/quotations-view'
+import { TasksView } from '@/components/tasks/tasks-view'
 import { CreateRecordModal } from '@/components/records/create-record-modal'
 import { RecordDetailModal } from '@/components/records/record-detail-modal'
 import { EditRecordModal } from '@/components/records/edit-record-modal'
@@ -90,6 +92,28 @@ export default function Page() {
       return <LeadSourcesView records={records} onAddLeads={addRecords} />
     }
 
+    if (active === 'Quotations') {
+      return (
+        <QuotationsView
+          records={records}
+          onAdd={() => handleCreate('Quotations')}
+          onEdit={(record) => setEditingRecord(record)}
+          onSelect={setSelectedRecord}
+        />
+      )
+    }
+
+    if (active === 'Tasks') {
+      return (
+        <TasksView
+          records={records}
+          onAdd={() => handleCreate('Tasks')}
+          onEdit={(record) => setEditingRecord(record)}
+          onUpdateTask={handleUpdate}
+        />
+      )
+    }
+
     if (active === 'Invoices') {
       return <InvoicePage onAdd={() => handleCreate('Invoices')} />
     }
@@ -130,10 +154,11 @@ export default function Page() {
         <div className="page-body">{renderContent()}</div>
       </section>
 
-      {/* Creation Modal */}
+      {/* Creation Modal (Dynamically dispatches dedicated specialized forms for Quotations, Tasks, Deals, Contacts, Companies, Support, Leads) */}
       {modalType && (
         <CreateRecordModal
           type={modalType}
+          records={records}
           onClose={() => setModalType(null)}
           onSave={handleSave}
         />
@@ -155,6 +180,7 @@ export default function Page() {
       {editingRecord && (
         <EditRecordModal
           record={editingRecord}
+          type={active}
           onClose={() => setEditingRecord(null)}
           onSave={handleUpdate}
           onDelete={handleDelete}

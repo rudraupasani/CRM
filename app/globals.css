@@ -1796,3 +1796,108 @@ button {
         color: #0f766e !important;
     }
 }
+
+
+/* ==========================================================================
+   PREMIUM POLISH & SMOOTH ANIMATIONS
+   ========================================================================== */
+@keyframes crmFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes crmModalScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.94) translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes crmSlideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes crmPulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(114, 87, 233, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(114, 87, 233, 0);
+  }
+}
+
+.modal-backdrop {
+  animation: crmFadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.modal {
+  animation: crmModalScale 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.panel {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+}
+
+.clickable-row {
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.clickable-row:hover {
+  background-color: #f8fafc !important;
+}
+
+.primary-button {
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.primary-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(114, 87, 233, 0.35);
+}
+
+.primary-button:active {
+  transform: translateY(0);
+}
+
+.secondary-button {
+  transition: all 0.15s ease;
+}
+
+.secondary-button:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+/* Custom sleek scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
