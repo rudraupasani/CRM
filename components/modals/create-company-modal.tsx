@@ -198,3 +198,4 @@ export function CreateCompanyModal({ onClose, onSave }: CreateCompanyModalProps)
     </div>
   )
 }
+

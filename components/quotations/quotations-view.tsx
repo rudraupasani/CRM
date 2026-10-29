@@ -199,3 +199,4 @@ export function QuotationsView({ records, onAdd, onEdit, onSelect }: QuotationsV
     </>
   )
 }
+

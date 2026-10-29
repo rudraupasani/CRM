@@ -229,3 +229,4 @@ export function CreateDealModal({ onClose, onSave, records = [] }: CreateDealMod
     </div>
   )
 }
+
